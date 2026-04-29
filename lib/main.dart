@@ -44,6 +44,14 @@ class PedalHubApp extends StatelessWidget {
 class LandingPage extends StatelessWidget {
   const LandingPage({super.key});
 
+  // APK download link
+  static const String _apkUrl =
+      'https://drive.google.com/uc?export=download&id=1QSh1dgWetM8uCn_HY8Qr9VCMUEtfPA2b';
+
+  // Questionnaire PDF link
+  static const String _questionnaireUrl =
+      'https://drive.google.com/uc?export=download&id=1aJO2IO4GPOXj9NLK6A80UNYi25Mivm8z';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,6 +62,7 @@ class LandingPage extends StatelessWidget {
             _buildHero(),
             _buildWhatIsPedalHub(),
             _buildGuideSection(),
+            _buildQuestionnaireSection(),
             _buildDownloadSection(),
             _buildFooter(),
           ],
@@ -110,9 +119,7 @@ class LandingPage extends StatelessWidget {
           ),
           const SizedBox(height: 36),
           ElevatedButton.icon(
-            onPressed: () => _launchUrl(
-              'https://drive.google.com/uc?export=download&id=1QSh1dgWetM8uCn_HY8Qr9VCMUEtfPA2b',
-            ),
+            onPressed: () => _launchUrl(_apkUrl),
             icon: const Icon(Icons.download_rounded, size: 20),
             label: const Text(
               'Download App (APK)',
@@ -266,7 +273,6 @@ class LandingPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header
           Container(
             padding: const EdgeInsets.all(24),
             decoration: const BoxDecoration(
@@ -305,7 +311,6 @@ class LandingPage extends StatelessWidget {
               ],
             ),
           ),
-          // Steps
           Padding(
             padding: const EdgeInsets.all(24),
             child: Column(
@@ -355,6 +360,177 @@ class LandingPage extends StatelessWidget {
     );
   }
 
+  // ── Questionnaire ─────────────────────────────────────────────────────────
+  Widget _buildQuestionnaireSection() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 60, horizontal: 24),
+      color: AppTheme.whiteColor,
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 720),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _sectionLabel('EVALUATION'),
+              const SizedBox(height: 10),
+              const Text(
+                'Help Us Improve PedalHub',
+                style: TextStyle(
+                  fontSize: 34,
+                  fontWeight: FontWeight.w800,
+                  color: AppTheme.darkColor,
+                  letterSpacing: -0.5,
+                ),
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                'We value your honest feedback! Please download the evaluation questionnaire below, print it, answer all items carefully, affix your signature, and submit it to our team.',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Color(0xFF3A3D33),
+                  height: 1.75,
+                ),
+              ),
+              const SizedBox(height: 28),
+              // Instruction steps
+              _buildInstructionStep(
+                Icons.download_rounded,
+                'Download the questionnaire PDF.',
+              ),
+              _buildInstructionStep(
+                Icons.print_rounded,
+                'Print the questionnaire.',
+              ),
+              _buildInstructionStep(
+                Icons.edit_rounded,
+                'Answer all items carefully and honestly.',
+              ),
+              _buildInstructionStep(
+                Icons.draw_rounded,
+                'Affix your signature at the bottom of the form.',
+              ),
+              _buildInstructionStep(
+                Icons.send_rounded,
+                'Submit the accomplished form to our team.',
+              ),
+              const SizedBox(height: 32),
+              // Download button
+              Container(
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  color: AppTheme.creamColor,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: AppTheme.greenLightColor),
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 52,
+                      height: 52,
+                      decoration: BoxDecoration(
+                        color: AppTheme.redColor,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Icon(
+                        Icons.description_rounded,
+                        color: AppTheme.whiteColor,
+                        size: 28,
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    const Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'ISO/IEC 25010 Evaluation Form',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 15,
+                              color: AppTheme.darkColor,
+                            ),
+                          ),
+                          SizedBox(height: 4),
+                          Text(
+                            'PedalHub Software Quality Questionnaire',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Color(0xFF5A5D52),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    ElevatedButton.icon(
+                      onPressed: () => _launchUrl(_questionnaireUrl),
+                      icon: const Icon(Icons.download_rounded, size: 16),
+                      label: const Text(
+                        'Download',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppTheme.redColor,
+                        foregroundColor: AppTheme.whiteColor,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 12,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        elevation: 0,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInstructionStep(IconData icon, String text) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 14),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 36,
+            height: 36,
+            margin: const EdgeInsets.only(right: 14),
+            decoration: BoxDecoration(
+              color: AppTheme.creamColor,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: AppTheme.greenLightColor),
+            ),
+            child: Icon(icon, size: 18, color: AppTheme.redColor),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Text(
+                text,
+                style: const TextStyle(
+                  fontSize: 15,
+                  color: Color(0xFF2A2D22),
+                  height: 1.5,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   // ── Download ──────────────────────────────────────────────────────────────
   Widget _buildDownloadSection() {
     return Container(
@@ -394,9 +570,7 @@ class LandingPage extends StatelessWidget {
             ),
             const SizedBox(height: 28),
             ElevatedButton.icon(
-              onPressed: () => _launchUrl(
-                'https://drive.google.com/uc?export=download&id=1QSh1dgWetM8uCn_HY8Qr9VCMUEtfPA2b',
-              ),
+              onPressed: () => _launchUrl(_apkUrl),
               icon: const Icon(Icons.download_rounded),
               label: const Text(
                 'Download APK',
