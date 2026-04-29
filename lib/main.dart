@@ -5,6 +5,16 @@ void main() {
   runApp(const PedalHubApp());
 }
 
+// ── Theme ──────────────────────────────────────────────────────────────────
+class AppTheme {
+  static const Color darkColor = Color(0xFF090C02);
+  static const Color redColor = Color(0xFFA72608);
+  static const Color greenLightColor = Color(0xFFBBC5AA);
+  static const Color creamColor = Color(0xFFDDE2C6);
+  static const Color whiteColor = Color(0xFFFFFFFF);
+}
+
+// ── App ────────────────────────────────────────────────────────────────────
 class PedalHubApp extends StatelessWidget {
   const PedalHubApp({super.key});
 
@@ -14,29 +24,37 @@ class PedalHubApp extends StatelessWidget {
       title: 'PedalHub — Smart Bike Sharing',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF1A6B3C)),
         useMaterial3: true,
-        fontFamily: 'Inter',
+        scaffoldBackgroundColor: AppTheme.creamColor,
+        colorScheme: const ColorScheme.light(
+          primary: AppTheme.redColor,
+          secondary: AppTheme.greenLightColor,
+          surface: AppTheme.whiteColor,
+          onPrimary: AppTheme.whiteColor,
+          onSecondary: AppTheme.darkColor,
+          onSurface: AppTheme.darkColor,
+        ),
       ),
       home: const LandingPage(),
     );
   }
 }
 
+// ── Landing Page ───────────────────────────────────────────────────────────
 class LandingPage extends StatelessWidget {
   const LandingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F7F2),
+      backgroundColor: AppTheme.creamColor,
       body: SingleChildScrollView(
         child: Column(
           children: [
-            _buildHero(context),
+            _buildHero(),
             _buildWhatIsPedalHub(),
             _buildGuideSection(),
-            _buildDownloadSection(context),
+            _buildDownloadSection(),
             _buildFooter(),
           ],
         ),
@@ -44,34 +62,32 @@ class LandingPage extends StatelessWidget {
     );
   }
 
-  Widget _buildHero(BuildContext context) {
+  // ── Hero ──────────────────────────────────────────────────────────────────
+  Widget _buildHero() {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 80, horizontal: 24),
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Color(0xFF1A6B3C), Color(0xFF2D9E5F)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
+      color: AppTheme.darkColor,
       child: Column(
         children: [
-          // Logo / Icon
           Container(
             width: 90,
             height: 90,
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.15),
+              color: AppTheme.redColor,
               borderRadius: BorderRadius.circular(22),
             ),
-            child: const Icon(Icons.pedal_bike, color: Colors.white, size: 52),
+            child: const Icon(
+              Icons.pedal_bike,
+              color: AppTheme.whiteColor,
+              size: 52,
+            ),
           ),
           const SizedBox(height: 24),
           const Text(
             'PedalHub',
             style: TextStyle(
-              color: Colors.white,
+              color: AppTheme.whiteColor,
               fontSize: 52,
               fontWeight: FontWeight.w800,
               letterSpacing: -1.5,
@@ -81,10 +97,15 @@ class LandingPage extends StatelessWidget {
           const Text(
             'Smart Bike Sharing for University Students & Staff',
             textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.white70,
-              fontSize: 18,
-              fontWeight: FontWeight.w400,
+            style: TextStyle(color: AppTheme.greenLightColor, fontSize: 18),
+          ),
+          const SizedBox(height: 36),
+          Container(
+            width: 60,
+            height: 3,
+            decoration: BoxDecoration(
+              color: AppTheme.redColor,
+              borderRadius: BorderRadius.circular(2),
             ),
           ),
           const SizedBox(height: 36),
@@ -98,11 +119,11 @@ class LandingPage extends StatelessWidget {
               style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
             ),
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white,
-              foregroundColor: const Color(0xFF1A6B3C),
+              backgroundColor: AppTheme.redColor,
+              foregroundColor: AppTheme.whiteColor,
               padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(14),
+                borderRadius: BorderRadius.circular(12),
               ),
               elevation: 0,
             ),
@@ -112,11 +133,12 @@ class LandingPage extends StatelessWidget {
     );
   }
 
+  // ── About ─────────────────────────────────────────────────────────────────
   Widget _buildWhatIsPedalHub() {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 60, horizontal: 24),
-      color: Colors.white,
+      color: AppTheme.whiteColor,
       child: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 720),
@@ -130,7 +152,7 @@ class LandingPage extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 34,
                   fontWeight: FontWeight.w800,
-                  color: Color(0xFF1A1A1A),
+                  color: AppTheme.darkColor,
                   letterSpacing: -0.5,
                 ),
               ),
@@ -139,18 +161,19 @@ class LandingPage extends StatelessWidget {
                 'PedalHub is a smart bike-sharing mobile application designed for university students and staff. It allows users to borrow bicycles, apply for long-term bike loans, submit reports, and access secure authentication features for a convenient and sustainable campus transportation system.',
                 style: TextStyle(
                   fontSize: 16,
-                  color: Color(0xFF555555),
+                  color: Color(0xFF3A3D33),
                   height: 1.75,
                 ),
               ),
               const SizedBox(height: 32),
-              Row(
+              Wrap(
+                spacing: 12,
+                runSpacing: 12,
                 children: [
                   _featureChip(Icons.directions_bike, 'Bike Borrowing'),
-                  const SizedBox(width: 12),
                   _featureChip(Icons.face, 'Face Auth'),
-                  const SizedBox(width: 12),
-                  _featureChip(Icons.report, 'Reports'),
+                  _featureChip(Icons.report_rounded, 'Reports'),
+                  _featureChip(Icons.lock_rounded, 'Secure Login'),
                 ],
               ),
             ],
@@ -160,12 +183,12 @@ class LandingPage extends StatelessWidget {
     );
   }
 
+  // ── Guide ─────────────────────────────────────────────────────────────────
   Widget _buildGuideSection() {
     final sections = [
       _GuideSection(
         icon: Icons.login_rounded,
         title: 'Getting Started — First Time Login',
-        color: const Color(0xFF1A6B3C),
         steps: [
           'Open the PedalHub mobile application.',
           'On the login screen, enter your SR-Code as both your username and default password.',
@@ -176,7 +199,6 @@ class LandingPage extends StatelessWidget {
       _GuideSection(
         icon: Icons.calendar_month_rounded,
         title: 'Applying for a Long-Term (Semestral) Bike Loan',
-        color: const Color(0xFF2563EB),
         steps: [
           'From the main dashboard, navigate to the Borrowing section.',
           'Select Long-Term / Semestral as your borrowing type.',
@@ -187,7 +209,6 @@ class LandingPage extends StatelessWidget {
       _GuideSection(
         icon: Icons.flag_rounded,
         title: 'Submitting a Report',
-        color: const Color(0xFFD97706),
         steps: [
           'From the main dashboard, navigate to the Report section.',
           'Select the type of report you wish to submit (e.g., damaged bike, missing bike, or incident report).',
@@ -200,7 +221,7 @@ class LandingPage extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      color: const Color(0xFFF5F7F2),
+      color: AppTheme.creamColor,
       padding: const EdgeInsets.symmetric(vertical: 60, horizontal: 24),
       child: Center(
         child: ConstrainedBox(
@@ -215,7 +236,7 @@ class LandingPage extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 34,
                   fontWeight: FontWeight.w800,
-                  color: Color(0xFF1A1A1A),
+                  color: AppTheme.darkColor,
                   letterSpacing: -0.5,
                 ),
               ),
@@ -231,13 +252,12 @@ class LandingPage extends StatelessWidget {
   Widget _buildGuideCard(_GuideSection section) {
     return Container(
       margin: const EdgeInsets.only(bottom: 24),
-      padding: const EdgeInsets.all(28),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppTheme.whiteColor,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: AppTheme.darkColor.withOpacity(0.06),
             blurRadius: 20,
             offset: const Offset(0, 4),
           ),
@@ -246,68 +266,88 @@ class LandingPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Container(
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                  color: section.color.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Icon(section.icon, color: section.color, size: 24),
+          // Header
+          Container(
+            padding: const EdgeInsets.all(24),
+            decoration: const BoxDecoration(
+              color: AppTheme.darkColor,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
               ),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Text(
-                  section.title,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xFF1A1A1A),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: AppTheme.redColor,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    section.icon,
+                    color: AppTheme.whiteColor,
+                    size: 24,
                   ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          ...section.steps.asMap().entries.map(
-            (e) => Padding(
-              padding: const EdgeInsets.only(bottom: 14),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: 26,
-                    height: 26,
-                    margin: const EdgeInsets.only(right: 12, top: 1),
-                    decoration: BoxDecoration(
-                      color: section.color,
-                      shape: BoxShape.circle,
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Text(
+                    section.title,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: AppTheme.whiteColor,
                     ),
-                    child: Center(
-                      child: Text(
-                        '${e.key + 1}',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 13,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // Steps
+          Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              children: section.steps.asMap().entries.map((e) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 28,
+                        height: 28,
+                        margin: const EdgeInsets.only(right: 14, top: 1),
+                        decoration: BoxDecoration(
+                          color: AppTheme.redColor,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Center(
+                          child: Text(
+                            '${e.key + 1}',
+                            style: const TextStyle(
+                              color: AppTheme.whiteColor,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 13,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Text(
-                      e.value,
-                      style: const TextStyle(
-                        fontSize: 15,
-                        color: Color(0xFF444444),
-                        height: 1.6,
+                      Expanded(
+                        child: Text(
+                          e.value,
+                          style: const TextStyle(
+                            fontSize: 15,
+                            color: Color(0xFF2A2D22),
+                            height: 1.65,
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
-              ),
+                );
+              }).toList(),
             ),
           ),
         ],
@@ -315,20 +355,33 @@ class LandingPage extends StatelessWidget {
     );
   }
 
-  Widget _buildDownloadSection(BuildContext context) {
+  // ── Download ──────────────────────────────────────────────────────────────
+  Widget _buildDownloadSection() {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 60, horizontal: 24),
-      color: const Color(0xFF1A6B3C),
+      color: AppTheme.redColor,
       child: Center(
         child: Column(
           children: [
-            const Icon(Icons.phone_android, color: Colors.white70, size: 40),
-            const SizedBox(height: 16),
+            Container(
+              width: 70,
+              height: 70,
+              decoration: BoxDecoration(
+                color: AppTheme.whiteColor.withOpacity(0.15),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.phone_android,
+                color: AppTheme.whiteColor,
+                size: 36,
+              ),
+            ),
+            const SizedBox(height: 20),
             const Text(
               'Ready to ride?',
               style: TextStyle(
-                color: Colors.white,
+                color: AppTheme.whiteColor,
                 fontSize: 30,
                 fontWeight: FontWeight.w800,
               ),
@@ -336,25 +389,28 @@ class LandingPage extends StatelessWidget {
             const SizedBox(height: 10),
             const Text(
               'Download the PedalHub app and get started today.',
-              style: TextStyle(color: Colors.white70, fontSize: 16),
+              textAlign: TextAlign.center,
+              style: TextStyle(color: AppTheme.creamColor, fontSize: 16),
             ),
             const SizedBox(height: 28),
             ElevatedButton.icon(
-              onPressed: () => _launchUrl('YOUR_APK_LINK_HERE'),
+              onPressed: () => _launchUrl(
+                'https://drive.google.com/uc?export=download&id=1QSh1dgWetM8uCn_HY8Qr9VCMUEtfPA2b',
+              ),
               icon: const Icon(Icons.download_rounded),
               label: const Text(
                 'Download APK',
                 style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
               ),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                foregroundColor: const Color(0xFF1A6B3C),
+                backgroundColor: AppTheme.whiteColor,
+                foregroundColor: AppTheme.redColor,
                 padding: const EdgeInsets.symmetric(
                   horizontal: 32,
                   vertical: 16,
                 ),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(12),
                 ),
                 elevation: 0,
               ),
@@ -365,29 +421,44 @@ class LandingPage extends StatelessWidget {
     );
   }
 
+  // ── Footer ────────────────────────────────────────────────────────────────
   Widget _buildFooter() {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 24),
-      color: const Color(0xFF111111),
+      padding: const EdgeInsets.symmetric(vertical: 28, horizontal: 24),
+      color: AppTheme.darkColor,
       child: const Center(
         child: Text(
           '© 2025 PedalHub. All rights reserved.',
-          style: TextStyle(color: Colors.white38, fontSize: 13),
+          style: TextStyle(color: AppTheme.greenLightColor, fontSize: 13),
         ),
       ),
     );
   }
 
+  // ── Helpers ───────────────────────────────────────────────────────────────
   Widget _sectionLabel(String text) {
-    return Text(
-      text,
-      style: const TextStyle(
-        color: Color(0xFF1A6B3C),
-        fontWeight: FontWeight.w700,
-        fontSize: 12,
-        letterSpacing: 2,
-      ),
+    return Row(
+      children: [
+        Container(
+          width: 18,
+          height: 3,
+          decoration: BoxDecoration(
+            color: AppTheme.redColor,
+            borderRadius: BorderRadius.circular(2),
+          ),
+        ),
+        const SizedBox(width: 8),
+        Text(
+          text,
+          style: const TextStyle(
+            color: AppTheme.redColor,
+            fontWeight: FontWeight.w700,
+            fontSize: 12,
+            letterSpacing: 2,
+          ),
+        ),
+      ],
     );
   }
 
@@ -395,19 +466,19 @@ class LandingPage extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       decoration: BoxDecoration(
-        color: const Color(0xFFF0F7F3),
+        color: AppTheme.creamColor,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: const Color(0xFFB8DFC8)),
+        border: Border.all(color: AppTheme.greenLightColor),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 16, color: const Color(0xFF1A6B3C)),
+          Icon(icon, size: 16, color: AppTheme.redColor),
           const SizedBox(width: 6),
           Text(
             label,
             style: const TextStyle(
-              color: Color(0xFF1A6B3C),
+              color: AppTheme.darkColor,
               fontWeight: FontWeight.w600,
               fontSize: 13,
             ),
@@ -425,15 +496,15 @@ class LandingPage extends StatelessWidget {
   }
 }
 
+// ── Data Model ────────────────────────────────────────────────────────────
 class _GuideSection {
   final IconData icon;
   final String title;
-  final Color color;
   final List<String> steps;
+
   const _GuideSection({
     required this.icon,
     required this.title,
-    required this.color,
     required this.steps,
   });
 }
